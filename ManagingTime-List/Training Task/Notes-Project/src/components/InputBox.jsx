@@ -5,13 +5,26 @@ import Button from './Button.jsx';
 
 export default function InputBox({onAddTask}) {
   const [newTask,setNewTask] = useState('');
+  const [error, setError] = useState('');
 
   function handleChange(event){
     setNewTask(event.target.value);
+    setError('');
   }
   function handleButtonClick() {
     onAddTask(newTask); 
     setNewTask(''); 
+  }
+
+  function handleButtonClick() {
+    const englishRegex = /^[a-zA-Z0-9\s.,!?'"-]+$/;
+    
+    if (englishRegex.test(newTask)) {
+      onAddTask(newTask);
+      setNewTask(''); 
+    } else {
+      setError('Please enter the task in English');
+    }
   }
 
   return (
@@ -29,6 +42,7 @@ export default function InputBox({onAddTask}) {
             onChange={handleChange}
           />
         </div>
+        {error && <p className="text-red-500 mt-2">{error}</p>}
         <Button onClick={handleButtonClick}>
           Add new task
         </Button>
